@@ -1,75 +1,21 @@
-public class SudokuPuzzleGenerator {
-
-    public static void main(String[] args) {
-        int[][] board = new int[9][9];
-
-        if (fillBoard(board)) {
-            printBoard(board);
-        } else {
-            System.out.println("No solution");
-        }
-    }
-
-    public static boolean fillBoard(int[][] board) {
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
-                if (board[row][col] == 0) {
-                    for (int num = 1; num <= 9; num++) {
-                        if (isValid(board, row, col, num)) {
-                            board[row][col] = num;
-
-                            if (fillBoard(board)) {
-                                return true;
-                            }
-
-                            board[row][col] = 0;
-                        }
-                    }
-
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-public static boolean isValid(int[][] board, int row, int col, int num) {
-        for (int i = 0; i < 9; i++) {
-            if (board[row][i] == num || board[i][col] == num) {
-                return false;
-            }
-        }
-
-        int startRow = row - row % 3;
-        int startCol = col - col % 3;
-
-        for (int i = startRow; i < startRow + 3; i++) {
-            for (int j = startCol; j < startCol + 3; j++) {
-                if (board[i][j] == num) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    public static void printBoard(int[][] board) {
-        for (int i = 0; i < 9; i++) {
-            if (i % 3 == 0 && i != 0) {
-                System.out.println("- - - - - - - - - - -");
-            }
-            for (int j = 0; j < 9; j++) {
-                if (j % 3 == 0 && j != 0) {
-                    System.out.print("| ");
-                }
-                System.out.print(board[i][j] + " ");
-            }
-           System.out.println();
-        }
-    }
-}
+Program Overview
+So basically The purpose of this program is to be able to generate and display a fully solved 9×9 Sudoku board. Sudoku is a number-placement puzzle where each number from 1 to 9 must appear exactly once in every row, column, and 3×3 subgrid. The program strats off by creating an empty 2D array to represent the board, in which all the values start off with 0 and  then uses a recursive backtracking algorithm to fill the board with valid numbers while following all Sudoku rules. Once a valid solution is found, the completed board is printed in a structured format that visually separates it into those 3 by 3 sections
 
 
+Data Structures
 
+The main data structure that was used in this program was the 2D integer array, which basically is the reason that board is formatted like a 9 by 9 and where each row and column corresponds directly to the puzzle layout and each cell holds a value from 1 to 9 or 0 if it is empty. This structure is usually the best because it allows direct access to rows, columns, and subgrids using indices. Furthermore,  the program relies on simple looping constructs instead of using an ArrayList, as it iterates through numbers 1 through 9 when attempting to fill each cell; this approach keeps the program simple and avoids unnecessary memory usage.
+
+Algorithm Design
+
+So the program uses a backtracking algorithm to create a working solution by trying out different number placements. So it starts at the first cell and moves through the board row by row, checking for empty cells. When an empty cell is found, the program tries to do the same thing with the numbers from 1 through 9 and uses a validation method to ensure that the number does not violate Sudoku rules. If a number is valid, it is placed in the cell and then the  algorithm recursively tries to fill the rest of the board in a similar way. When error occurs like for example getting to a dead end then the algorithm kind of  backtracks by resetting the current cell to 0 and trying the next number. This process continues until all cells are correctly filled
+
+Methods
+
+First is the main method that initializes the 2D array and starts the solving process by calling the fillBoard method, then prints the completed board if a solution is found. The fillBoard method is then uses recursion and backtracking to fill each empty cell with a valid number from 1 to 9 as we previous talked about , returning true when the board is successfully completed or false if no solution is possible from the current configuration. The isValid method checks whether placing a specific number in a given row and column is allowed by verifying that the number does not already exist in the same row, column, or 3 by 3 subgrid. Finally, the printBoard method formats and displays the completed Sudoku board, adding visual separators between rows and columns to clearly distinguish the 3 by 3
+
+Testing Plan
+I first checked if it could generate a full, valid Sudoku solution without any initial values, and it successfully produced a completed grid. And then I tried to check the output manually to make sure each row followed the 3 by 3 subgrid rules with numbers 1 through 9. Furthurmore, I tested for the consistency of the behavior of the backtracking algorithm by tracking how the program handled incorrect placements, confirming that it properly reset cells and retried different values until a valid solution was found, demonstrating that the recursive logic works correctly.
+
+Challenges and Solutions
+One of the main challenges I ran into while trying to get this program to work was implementing the backtracking algorithm correctly because I was having issues with making sure that the program would reset cells properly when encountering a dead end. Whenever it ran to a dead end I didnt know how to go beyond. I was able to fix it through structuring the recursive calls in the fillBoard method and ensuring that each failed attempt resulted in resetting the cell value back to 0 before trying the next number. Aside from this the other issues were usually just debugging such as getting capital cases in certain codes wrong but it was fixed through debugging though.
